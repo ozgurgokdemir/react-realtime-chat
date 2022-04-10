@@ -12,10 +12,10 @@ import {
 import { StarIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useColorMode } from '@chakra-ui/react';
 import { LocaleContext } from './store/locale-context';
+import useLocalization from './hooks/use-localization';
 
 const App = () => {
 	const { colorMode, toggleColorMode } = useColorMode();
-	const { language } = useContext(LocaleContext);
 	const innerText = {
 		en: {
 			button: (mode) => `Set to ${mode === 'dark' ? 'Light' : 'Dark'} Mode`,
@@ -24,6 +24,7 @@ const App = () => {
 			button: (mode) => `${mode === 'dark' ? 'Açık' : 'Koyu'} Tema'ya Geç`,
 		},
 	};
+  const { t } = useLocalization(innerText);
 
 	return (
 		<section className='container h-screen flex mx-auto px-6 py-12'>
@@ -33,7 +34,7 @@ const App = () => {
 			<div className='w-1/2 flex items-center justify-center gap-6'>
 				<LocaleSelect />
 				<Button onClick={toggleColorMode} colorScheme='teal' variant='solid'>
-					{innerText[language].button(colorMode)}
+          {t('button', colorMode)}
 				</Button>
 			</div>
 		</section>

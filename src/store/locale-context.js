@@ -5,9 +5,11 @@ export const LocaleContext = createContext({ language: '' });
 const LocaleProvider = ({ children }) => {
 	const [language, setLanguage] = useState('en');
 
+	const fallback = 'en';
+
 	useEffect(() => {
 		let language = localStorage.getItem('locale') ?? navigator.language;
-		setLanguage(['tr-TR', 'tr'].includes(language) ? 'tr' : 'en');
+		setLanguage(['tr-TR', 'tr'].includes(language) ? 'tr' : fallback);
 	}, []);
 
 	const handleChange = (language) => {
@@ -15,7 +17,7 @@ const LocaleProvider = ({ children }) => {
 		setLanguage(language);
 	};
 
-	const localeContext = { language, setLanguage: handleChange };
+	const localeContext = { language, setLanguage: handleChange, fallback };
 
 	return (
 		<LocaleContext.Provider value={localeContext}>
