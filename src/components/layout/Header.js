@@ -1,5 +1,5 @@
-import ColorModeSelect from '../Settings/ColorModeSelect';
-import LanguageSelect from '../Settings/LanguageSelect';
+import ColorModeSelect from '../settings/ColorModeSelect';
+import LanguageSelect from '../settings/LanguageSelect';
 
 const Header = () => {
   return (
