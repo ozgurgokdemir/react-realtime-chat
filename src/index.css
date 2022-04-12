@@ -12,3 +12,35 @@
 		box-shadow: var(--chakra-shadows-outline);
 	}
 }
+
+#root {
+	display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+  'head'
+  'main'
+  'nav';
+}
+#root > nav {
+  grid-area: nav;
+}
+#root > header {
+  grid-area: head;
+}
+#root > main {
+  grid-area: main;
+}
+@media (min-width: 1024px) { 
+  #root {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    grid-template-columns: auto 1fr 1.5fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'nav head head head'
+      'nav main main main'
+      'nav main main main';
+  }
+}
