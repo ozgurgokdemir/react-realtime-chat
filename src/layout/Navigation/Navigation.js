@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import useLocalization from '../../hooks/use-localization';
-import MediaQuery from '../utilities/MediaQuery';
+import MediaQuery from '../../components/MediaQuery/MediaQuery';
 
 const Navigation = () => {
   const translations = {

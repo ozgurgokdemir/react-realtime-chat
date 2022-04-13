@@ -1,4 +1,4 @@
-import useLocalization from '../hooks/use-localization';
+import useLocalization from '../../hooks/use-localization';
 
 const Auth = () => {
 	const translations = {
