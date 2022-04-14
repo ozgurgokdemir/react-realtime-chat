@@ -1,9 +1,13 @@
 import { extendTheme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 
+const stored = localStorage.getItem('chakra-ui-color-mode');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+const colorMode = stored ?? (prefersDark.matches ? 'dark' : 'light');
+
 const config = {
-	initialColorMode: 'light',
-	useSystemColorMode: true,
+	initialColorMode: colorMode,
+	useSystemColorMode: false,
 };
 
 const colors = {

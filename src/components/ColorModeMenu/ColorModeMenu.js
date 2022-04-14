@@ -1,25 +1,56 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import useColorMode from '../../hooks/use-color-mode';
 import useLocalization from '../../hooks/use-localization';
-import { Button } from '@chakra-ui/react';
+import { Menu, MenuButton, IconButton , MenuList, MenuItem } from '@chakra-ui/react';
+import { IoMoon, IoSunny } from 'react-icons/io5';
+import { CgScreen } from 'react-icons/cg';
 
-const ColorModeSelect = () => {
-	const { colorMode, toggleColorMode } = useColorMode();
-
+const ColorModeMenu = () => {
 	const translations = {
 		en: {
-			button: (mode) => `Set to ${mode === 'dark' ? 'Light' : 'Dark'} Mode`,
+			light: 'Light',
+			dark: 'Dark',
+			system: 'System',
 		},
 		tr: {
-			button: (mode) => `${mode === 'dark' ? 'Açık' : 'Koyu'} Tema'ya Geç`,
+      light: 'Light',
+			dark: 'Dark',
+			system: 'System',
 		},
 	};
 	const { t } = useLocalization(translations);
 
-	return (
-		<Button onClick={toggleColorMode} colorScheme='teal' variant='outline'>
-			{t('button', colorMode)}
-		</Button>
-	);
-}
+  const { colorMode, setColorMode, COLOR_MODES } = useColorMode();
+  const storedColorMode = localStorage.getItem('color-mode');
 
-export default ColorModeSelect;
+  useEffect(() => {
+    if (!storedColorMode) setColorMode('system');
+  }, [storedColorMode, setColorMode]);
+
+	return (
+		<Menu autoSelect={false} gutter='12'>
+			<MenuButton as={IconButton} icon={(colorMode ?? storedColorMode) === 'light' ? <IoSunny />  : <IoMoon />} isRound={true} />
+			<MenuList minWidth='fit-content'>
+				{COLOR_MODES.map((key) => (
+					<MenuItem
+						key={key}
+            icon={
+              key === 'system'
+              ? <CgScreen /> 
+              : key === 'light'
+              ? <IoSunny /> 
+              : <IoMoon />
+            }
+						isDisabled={(colorMode ?? storedColorMode) === key}
+            fontWeight='medium'
+						onClick={setColorMode.bind(null, key)}
+					>
+						{t(key)}
+					</MenuItem>
+				))}
+			</MenuList>
+		</Menu>
+	);
+};
+
+export default ColorModeMenu;
