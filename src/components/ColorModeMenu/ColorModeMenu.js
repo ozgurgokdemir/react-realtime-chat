@@ -29,7 +29,7 @@ const ColorModeMenu = () => {
 
 	return (
 		<Menu autoSelect={false} gutter='12'>
-			<MenuButton as={IconButton} icon={(colorMode ?? storedColorMode) === 'light' ? <IoSunny />  : <IoMoon />} isRound={true} />
+			<MenuButton as={IconButton} icon={(colorMode ?? storedColorMode) === 'light' ? <IoSunny />  : <IoMoon />} isRound={true} colorScheme='teal' />
 			<MenuList minWidth='fit-content'>
 				{COLOR_MODES.map((key) => (
 					<MenuItem

@@ -17,6 +17,7 @@ const useColorMode = () => {
 			? 'dark'
 			: 'light';
 		localStorage.setItem('color-mode', colorMode);
+    document.documentElement.className = colorScheme;
 		setColorScheme(colorScheme);
 	}, [colorMode, setColorScheme]);
 
