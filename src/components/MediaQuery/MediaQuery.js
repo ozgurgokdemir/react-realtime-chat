@@ -1,10 +1,11 @@
-import { Fragment } from 'react';
-import useMediaQuery from '../../hooks/use-media-query';
+import { Fragment, useContext } from 'react';
+import { MediaContext } from '../../store/media-context';
 
 const MediaQuery = ({ min, max, children }) => {
-	const { width, breakpoints } = useMediaQuery();
-	if (min && breakpoints[min] > width) return;
-  if (max && breakpoints[max] <= width) return;
+  const { width, breakpoints } = useContext(MediaContext);
+  const isUnderMin = width < breakpoints[min];
+  const isAboveMax = width >= breakpoints[max];
+  if (isUnderMin || isAboveMax) return;
 	return <Fragment>{children}</Fragment>;
 };
 
