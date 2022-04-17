@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    height: 100vh;
+  }
 	button:focus:not(:focus-visible),
 	a:focus:not(:focus-visible) {
 		box-shadow: none;
@@ -14,6 +17,7 @@
 }
 
 #root {
+  height: 100%;
 	display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;

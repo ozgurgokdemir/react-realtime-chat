@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
-import Navigation from './layout/Navigation/Navigation';
-import Header from './layout/Header/Header';
+// import Header from './layout/Header/Header';
+// import Navbar from './layout/Navbar/Navbar';
 import Content from './layout/Content/Content';
 
 const App = () => {
 	return (
     <Fragment>
-      <Navigation />
-      <Header />
+      {/* <Header />
+      <Navbar /> */}
       <Content />
     </Fragment>
 	);
