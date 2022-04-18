@@ -1,13 +1,17 @@
 import { Fragment } from 'react';
-// import Header from './layout/Header/Header';
-// import Navbar from './layout/Navbar/Navbar';
+
+import { useAuth } from './store/auth-context';
+
+import Header from './layout/Header/Header';
+import Navbar from './layout/Navbar/Navbar';
 import Content from './layout/Content/Content';
 
 const App = () => {
+  const { user } = useAuth();
 	return (
     <Fragment>
-      {/* <Header />
-      <Navbar /> */}
+      {user && <Header />}
+      {user && <Navbar />}
       <Content />
     </Fragment>
 	);
