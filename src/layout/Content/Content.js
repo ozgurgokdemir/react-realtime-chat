@@ -4,6 +4,7 @@ import Home from '../../pages/Home/Home';
 import Login from '../../pages/Login/Login';
 import Register from '../../pages/Register/Register';
 
+import RequireAuth from '../../components/RequireAuth/RequireAuth';
 import Messages from '../../pages/Messages/Messages';
 
 const Content = () => {
@@ -14,11 +15,12 @@ const Content = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* protected routes */}
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/friends" />
-        <Route path="/settings" />
-        <Route path="/profile" />
+        <Route element={<RequireAuth />}>
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/friends" />
+          <Route path="/settings" />
+          <Route path="/profile" />
+        </Route>
       </Routes>
     </main>
   );

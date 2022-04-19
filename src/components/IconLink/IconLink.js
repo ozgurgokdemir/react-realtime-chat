@@ -1,15 +1,15 @@
 import { NavLink } from 'react-router-dom';
 
 const IconLink = ({ icon: Icon, to, className }) => {
-  const styles = [
-    'grid place-items-center px-8 py-6 text-inherit hover:bg-[#edf2f7]',
-    'dark:hover:bg-[#ffffff14]',
-    'lg:rounded-lg'
-  ]
-	const classes = [...styles, className].filter(style => !!style).join(' ').trim();
+  
+  const handleStyles = ({ isActive }) => {
+    const styles = 'grid place-items-center h-16 flex-1 text-inherit lg:rounded-lg';
+    const active = 'text-[color:#3182ce] dark:text-[color:#90cdf4]';
+    return [styles, (isActive && active), className].filter(style => !!style).join(' ');
+  }
   return (
-		<NavLink to={to} className={classes}>
-			<Icon className='w-6 h-6' />
+		<NavLink to={to} className={handleStyles}>
+			<Icon size='28' />
 		</NavLink>
 	);
 };
