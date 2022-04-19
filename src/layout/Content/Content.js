@@ -11,11 +11,12 @@ const Content = () => {
   return (
     <main className='flex overflow-hidden'>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-        <Route element={<RequireAuth />}>
+        <Route element={<RequireAuth false />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+        <Route element={<RequireAuth true />}>
           <Route path="/messages" element={<Messages />} />
           <Route path="/friends" />
           <Route path="/settings" />

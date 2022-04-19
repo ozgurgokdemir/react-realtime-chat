@@ -1,13 +1,18 @@
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../store/auth-context';
 
-const RequireAuth = () => {
+const RequireAuth = (props) => {
 	const { user } = useAuth();
 	const location = useLocation();
+  const isRequired = !props.false;
 	return (
-    user
-      ? <Outlet />
-	    : <Navigate to='/login' state={{ from: location }} replace />
+    isRequired
+      ? user
+        ? <Outlet />
+	      : <Navigate to='/login' state={{ from: location }} replace />
+      : user
+        ? <Navigate to='/messages' state={{ from: location }} replace />
+        : <Outlet />
 	);
 };
 

@@ -7,7 +7,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const location = pathname.slice(1);
-  const header = location[0].toUpperCase() + location.slice(1);
+  const header = location[0]?.toUpperCase() + location.slice(1);
   return (
     <header className='grid grid-cols-5 items-center border-b lg:p-8'>
       <IconButton className='navbutton' height='16' variant='ghost' aria-label='go back' icon={<IoArrowBackOutline size='28' />} onClick={navigate.bind(null, -1)} />
