@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import {
-	Stack,
-	Button,
-	FormControl,
-	FormLabel,
-	Input,
-	FormErrorMessage,
-} from '@chakra-ui/react';
+import { useState, Fragment } from 'react';
+import { Button, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Link as RouterLink } from 'react-router-dom';
+
+import CreateAccount from './CreateAccount';
+import CreateProfile from './CreateProfile';
 
 const accountSchema = yup.object().shape({
 	email: yup
@@ -47,83 +44,6 @@ const profileSchema = yup.object().shape({
 		.min(5, 'Name must be atleast 5 characters'),
 });
 
-const CreateAccount = ({ register, errors }) => {
-	return (
-		<Stack direction='column'>
-			<FormControl isInvalid={errors.email}>
-				<FormLabel htmlFor='email'>E-mail</FormLabel>
-				<Input type='email' id='email' {...register('email')} />
-				{errors.email && (
-					<FormErrorMessage className='text-red-500'>
-						{errors.email.message}
-					</FormErrorMessage>
-				)}
-			</FormControl>
-			<FormControl isInvalid={errors.password}>
-				<FormLabel htmlFor='password'>Password</FormLabel>
-				<Input type='password' id='password' {...register('password')} />
-				{errors.password && (
-					<FormErrorMessage className='text-red-500'>
-						{errors.password.message}
-					</FormErrorMessage>
-				)}
-			</FormControl>
-			<FormControl isInvalid={errors.confirmPassword}>
-				<FormLabel htmlFor='confirmPassword'>Confirm Password</FormLabel>
-				<Input
-					type='password'
-					id='confirmPassword'
-					{...register('confirmPassword')}
-				/>
-				{errors.confirmPassword && (
-					<FormErrorMessage className='text-red-500'>
-						{errors.confirmPassword.message}
-					</FormErrorMessage>
-				)}
-			</FormControl>
-		</Stack>
-	);
-};
-
-const CreateProfile = ({ register, errors }) => {
-	return (
-		<Stack direction='column'>
-			<FormControl isInvalid={errors.photo} isRequired>
-				<FormLabel htmlFor='photo'>Profile Photo</FormLabel>
-				<Input
-					type='file'
-					accept='image/*'
-					id='photo'
-					variant='flushed'
-					{...register('photo')}
-				/>
-				{errors.photo && (
-					<FormErrorMessage className='text-red-500'>
-						{errors.photo.message}
-					</FormErrorMessage>
-				)}
-			</FormControl>
-			<FormControl isInvalid={errors.name} isRequired>
-				<FormLabel htmlFor='name'>Name</FormLabel>
-				<Input type='name' id='name' {...register('name')} />
-				{errors.name && (
-					<FormErrorMessage className='text-red-500'>
-						{errors.name.message}
-					</FormErrorMessage>
-				)}
-			</FormControl>
-		</Stack>
-	);
-};
-
-const FormActions = ({ children }) => {
-	return (
-		<div className='grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] gap-4'>
-			{children}
-		</div>
-	);
-};
-
 const RegisterForm = ({ onSubmit }) => {
 	const [step, setStep] = useState(0);
 	const [data, setData] = useState({
@@ -142,8 +62,14 @@ const RegisterForm = ({ onSubmit }) => {
 	});
 
 	const steps = [
-		<CreateAccount register={register} errors={errors} />,
-		<CreateProfile register={register} errors={errors} />,
+		{
+			title: 'Create your Account',
+			controls: <CreateAccount register={register} errors={errors} />,
+		},
+		{
+			title: 'Create your Profile',
+			controls: <CreateProfile register={register} errors={errors} />,
+		},
 	];
 
 	const handleFormSubmit = (stepData) => {
@@ -153,28 +79,35 @@ const RegisterForm = ({ onSubmit }) => {
 	};
 
 	return (
-		<form
-			className='w-full flex flex-col gap-4'
-			onSubmit={handleSubmit(handleFormSubmit)}
-			noValidate
-		>
-			{steps[step]}
-			<FormActions>
-				{step !== 0 && (
-					<Button type='button' onClick={setStep.bind(null, (s) => s - 1)}>
-						Back
+		<Fragment>
+			<h1 className='text-3xl font-bold'>{steps[step].title}</h1>
+			<form
+				className='w-full flex flex-col gap-4'
+				onSubmit={handleSubmit(handleFormSubmit)}
+				noValidate
+			>
+				{steps[step].controls}
+				<div className='grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] gap-4'>
+					{step !== 0 ? (
+						<Button type='button' onClick={setStep.bind(null, (s) => s - 1)}>
+							Back
+						</Button>
+					) : (
+						<Link as={RouterLink} to='/login' className='w-fit my-auto'>
+							Sign-in instead
+						</Link>
+					)}
+					<Button
+						type='submit'
+						colorScheme='blue'
+						isLoading={step === steps.length - 1 && isSubmitting}
+						loadingText='Creating Account...'
+					>
+						{step === steps.length - 1 ? 'Create Account' : 'Next'}
 					</Button>
-				)}
-				<Button
-					type='submit'
-					colorScheme='blue'
-					isLoading={step === steps.length - 1 && isSubmitting}
-					loadingText='Creating Account...'
-				>
-					{step === steps.length - 1 ? 'Create Account' : 'Next'}
-				</Button>
-			</FormActions>
-		</form>
+				</div>
+			</form>
+		</Fragment>
 	);
 };
 
