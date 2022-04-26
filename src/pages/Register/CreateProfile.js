@@ -26,7 +26,7 @@ const schema = yup.object().shape({
 		.test('fileFormat', 'Unsupported file format', ([value]) =>
 			SUPPORTED_FORMATS.includes(value?.type)
 		),
-	name: yup
+	displayName: yup
 		.string()
 		.required('Name is required')
 		.min(5, 'Name must be atleast 5 characters'),
@@ -58,7 +58,7 @@ const CreateProfile = ({ onAction }) => {
 						<FormLabel htmlFor='photo'>Profile Photo</FormLabel>
 						<Input
 							type='file'
-							accept='image/*'
+							accept={SUPPORTED_FORMATS.join(',')}
 							id='photo'
 							variant='flushed'
 							{...register('photo')}
@@ -69,12 +69,12 @@ const CreateProfile = ({ onAction }) => {
 							</FormErrorMessage>
 						)}
 					</FormControl>
-					<FormControl isInvalid={errors.name}>
-						<FormLabel htmlFor='name'>Name</FormLabel>
-						<Input type='name' id='name' {...register('name')} />
-						{errors.name && (
+					<FormControl isInvalid={errors.displayName}>
+						<FormLabel htmlFor='displayName'>Name</FormLabel>
+						<Input type='text' id='displayName' {...register('displayName')} />
+						{errors.displayName && (
 							<FormErrorMessage className='text-red-500'>
-								{errors.name.message}
+								{errors.displayName.message}
 							</FormErrorMessage>
 						)}
 					</FormControl>
