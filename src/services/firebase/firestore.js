@@ -8,6 +8,7 @@ import {
 	orderBy,
 	limit,
 	addDoc as add,
+	setDoc as set,
 	getDocs as getMultiple,
 	getDoc as getSingle,
 } from 'firebase/firestore';
@@ -16,8 +17,11 @@ import { app } from './app';
 
 export const db = getFirestore(app);
 
-export const addDoc = (path, data) =>
-	add(collection(db, path), { ...data, timestamp: serverTimestamp() });
+export const addDoc = (path, data, timestamp = 'timestamp') =>
+	add(collection(db, path), { ...data, [timestamp]: serverTimestamp() });
+
+export const setDoc = (coll, doc, data, timestamp = 'createdAt') =>
+	set(document(db, coll, doc), { ...data, [timestamp]: serverTimestamp() });
 
 export const getDocs = (path) => getMultiple(collection(db, path));
 
