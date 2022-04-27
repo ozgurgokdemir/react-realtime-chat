@@ -1,5 +1,5 @@
 {
-  "name": "insecure-chat-app",
+  "name": "realtime-chat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
