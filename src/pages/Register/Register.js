@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import { register, updateProfile } from '../../services/firebase/auth';
 import { uploadFile } from '../../services/firebase/storage';
-import { setDoc } from '../../services/firebase/firestore';
+import { setDocument } from '../../services/firebase/firestore';
 
 import CreateAccount from './CreateAccount';
 import CreateProfile from './CreateProfile';
@@ -23,7 +23,7 @@ const reducer = (state, action) => {
 				const photoURL = await uploadFile(photo[0], path);
 				await updateProfile(displayName, photoURL);
 				const publicData = { email, displayName, photoURL };
-				await setDoc('users', user.uid, publicData);
+				await setDocument('users', user.uid, publicData);
 			};
 			submitRequest();
 			return { ...state, data: { ...state.data, ...action.data } };

@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { addDoc, loadDocs } from '../../services/firebase/firestore';
+import {
+	addDocument,
+	listenCollection,
+} from '../../services/firebase/firestore';
 import { useAuth } from '../../store/auth-context';
 
 const Chat = () => {
@@ -16,7 +19,7 @@ const Chat = () => {
 			direction: 'asc',
 			limit: 10,
 		};
-		loadDocs(`messages/${chatId}/messages`, constraints, (snapshot) => {
+		listenCollection(`messages/${chatId}/messages`, constraints, (snapshot) => {
 			const messages = snapshot.docs.map((doc) => ({
 				...doc.data(),
 				id: doc.id,
@@ -31,7 +34,7 @@ const Chat = () => {
 			text: messageInputRef.current.value,
 			by: user.uid,
 		};
-		addDoc(`messages/${chatId}/messages`, message);
+		addDocument(`messages/${chatId}/messages`, message);
 	};
 
 	return (

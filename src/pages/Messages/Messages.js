@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { loadDoc, getDoc, getDocs } from '../../services/firebase/firestore';
+import {
+	listenDocument,
+	getDocument,
+	getCollection,
+} from '../../services/firebase/firestore';
 import { useAuth } from '../../store/auth-context';
 
 const Messages = () => {
@@ -10,11 +14,11 @@ const Messages = () => {
 
 	useEffect(() => {
 		const fetchChatMemberIds = async (chatId) => {
-			const querySnapshot = await getDocs(`chats/${chatId}/members`);
+			const querySnapshot = await getCollection(`chats/${chatId}/members`);
 			return querySnapshot.docs.map(({ id }) => id);
 		};
 		const fetchUserData = async (userId) => {
-			const querySnapshot = await getDoc('users', userId);
+			const querySnapshot = await getDocument('users', userId);
 			return querySnapshot.data();
 		};
 		const handleSnapshot = (snapshot) => {
@@ -27,7 +31,7 @@ const Messages = () => {
 				setChats([{ id: chatId, contact }]);
 			});
 		};
-		loadDoc('users', user.uid, null, handleSnapshot);
+		listenDocument('users', user.uid, null, handleSnapshot);
 	}, [user.uid]);
 
 	return (
