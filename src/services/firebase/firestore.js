@@ -35,3 +35,12 @@ export const loadDocs = (path, cstr, callback) => {
 	const recentDocsQuery = query(docData, ...constraints);
 	onSnapshot(recentDocsQuery, callback);
 };
+
+export const loadDoc = (coll, doc, cstr, callback) => {
+	const docData = document(db, coll, doc);
+	const orderQuery = cstr?.field ? orderBy(cstr.field, cstr.direction) : null;
+	const limitQuery = cstr?.limit ? limit(cstr.limit) : null;
+	const constraints = [orderQuery, limitQuery].filter(Boolean);
+	const recentDocsQuery = query(docData, ...constraints);
+	onSnapshot(recentDocsQuery, callback);
+};

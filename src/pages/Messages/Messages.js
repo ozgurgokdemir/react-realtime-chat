@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { loadDocs, getDoc, getDocs } from '../../services/firebase/firestore';
+import { loadDoc, getDoc, getDocs } from '../../services/firebase/firestore';
 import { useAuth } from '../../store/auth-context';
 
 const Messages = () => {
@@ -18,8 +18,8 @@ const Messages = () => {
 			return querySnapshot.data();
 		};
 		const handleSnapshot = (snapshot) => {
-			const chatIds = snapshot.docs.map(({ id }) => id);
-			chatIds.forEach(async (chatId) => {
+			const userData = snapshot.data();
+			userData.chats.forEach(async (chatId) => {
 				const memberIds = await fetchChatMemberIds(chatId);
 				const contactId = memberIds.find((memberId) => memberId !== user.uid);
 				const contactInfo = await fetchUserData(contactId);
@@ -27,7 +27,7 @@ const Messages = () => {
 				setChats([{ id: chatId, contact }]);
 			});
 		};
-		loadDocs(`users/${user.uid}/chats`, null, handleSnapshot);
+		loadDoc('users', user.uid, null, handleSnapshot);
 	}, [user.uid]);
 
 	return (
