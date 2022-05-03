@@ -41,6 +41,7 @@ const Messages = () => {
 					{contact.name}
 				</Link>
 			))}
+			<Link to='join' className='py-6 text-center'>+ Join to Chat</Link>
 		</div>
 	);
 };

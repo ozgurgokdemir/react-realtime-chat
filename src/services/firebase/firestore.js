@@ -7,8 +7,8 @@ import {
 	serverTimestamp,
 	orderBy,
 	limit,
-	addDoc as add,
-	setDoc as set,
+	addDoc,
+	setDoc,
 	getDocs,
 	getDoc,
 } from 'firebase/firestore';
@@ -18,10 +18,13 @@ import { app } from './app';
 export const db = getFirestore(app);
 
 export const addDocument = (path, data, timestamp = 'timestamp') =>
-	add(collection(db, path), { ...data, [timestamp]: serverTimestamp() });
+	addDoc(collection(db, path), { ...data, [timestamp]: serverTimestamp() });
 
-export const setDocument = (coll, doc, data, timestamp = 'createdAt') =>
-	set(document(db, coll, doc), { ...data, [timestamp]: serverTimestamp() });
+export const setDocument = (coll, doc, data, timestamp, merge = false) => {
+  const timestampValue = timestamp ? { [timestamp]: serverTimestamp() } : {};
+  const documentData = { ...data, ...timestampValue };
+  setDoc(document(db, coll, doc), documentData, { merge });
+}
 
 export const getCollection = (path) => getDocs(collection(db, path));
 
