@@ -21,25 +21,42 @@ const Messages = () => {
 			const querySnapshot = await getDocument('users', userId);
 			return querySnapshot.data();
 		};
-		const handleSnapshot = async (snapshot) => {
+		const fetchChats = async (chats) => {
+			if (!chats) return [];
+			return Promise.all(
+				chats.map(async (chatId) => {
+					const memberIds = await fetchChatMemberIds(chatId);
+					const contactId = memberIds.find((memberId) => memberId !== user.uid);
+					const contactInfo = await fetchUserData(contactId);
+					const contact = {
+						uid: contactId,
+						displayName: contactInfo.displayName,
+						photoURL: contactInfo.photoURL,
+					};
+					return { id: chatId, contact };
+				})
+			);
+		};
+		const handleSnapshot = (snapshot) => {
 			const userData = snapshot.data();
-			userData.chats?.forEach(async (chatId) => {
-				const memberIds = await fetchChatMemberIds(chatId);
-				const contactId = memberIds.find((memberId) => memberId !== user.uid);
-				const contactInfo = await fetchUserData(contactId);
-				const contact = { uid: contactId, name: contactInfo.name };
-				setChats((prev) => [...prev, { id: chatId, contact }]);
-			});
-      setIsLoading(false);
+			fetchChats(userData.chats)
+				.then((chats) => setChats(chats))
+				.finally(() => setIsLoading(false));
 		};
 		listenDocument('users', user.uid, null, handleSnapshot);
 	}, [user.uid]);
 
-	const chatsContent = chats.map(({ id, contact }) => (
-		<Link to={id} key={id} className='px-4 py-6'>
-			{contact.name}
-		</Link>
-	));
+	const chatsContent = (
+		<ul className='flex flex-col'>
+			{chats.map(({ id, contact }) => (
+				<li key={id} className='inline-block'>
+					<Link to={id} className='inline-block w-full px-4 py-6'>
+						{contact.displayName}
+					</Link>
+				</li>
+			))}
+		</ul>
+	);
 	const joinChatContent = (
 		<div className='w-full h-full flex flex-col items-center justify-center gap-4'>
 			<div className='opacity-70'>Your messages are empty.</div>
@@ -51,8 +68,7 @@ const Messages = () => {
 
 	return (
 		<div className='w-full flex flex-col'>
-			{chats.length > 0 && chatsContent}
-			{chats.length === 0 && !isLoading && joinChatContent}
+			{chats.length > 0 ? chatsContent : !isLoading && joinChatContent}
 		</div>
 	);
 };
