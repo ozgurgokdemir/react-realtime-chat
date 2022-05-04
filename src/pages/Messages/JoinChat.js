@@ -27,15 +27,15 @@ const JoinChat = () => {
 
 	const { user } = useAuth();
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const handleFormSubmit = async ({ chatId }) => {
 		const querySnapshot = await getDocument('users', user.uid);
 		const prevChats = querySnapshot.data().chats;
-		if (!prevChats.includes(chatId)) {
-			const chats = [...prevChats, chatId];
+		if (!prevChats || !prevChats.includes(chatId)) {
+			const chats = [...(prevChats ? prevChats : ''), chatId];
 			setDocument('users', user.uid, { chats }, null, true);
-      navigate(`/messages/${chatId}`);
+			navigate(`/messages/${chatId}`);
 		}
 	};
 
